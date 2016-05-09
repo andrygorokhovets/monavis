@@ -1,0 +1,20 @@
+- global $themename;
+- $image_id = get_post_thumbnail_id();
+- $image_src = getImage('group', '200x200', $image_id);
+.news-line.col-md-12
+    .news-container.pull-left
+        .news-heading
+            h3
+                a(href!='<?php print(get_the_permalink()); ?>')
+                    -print(get_the_title());
+        .news-content.pull-left
+            .col-md-3.news-image
+                img.img-responsive(src!='<?php print($image_src); ?>', alt!='<?php print(get_the_title()); ?>')
+            .col-md-9.news-text
+                p
+                    - print(get_the_excerpt());
+            .btn-container.news-read-more
+                a.btn.btn-primary
+                    span
+                        - print(__('Order',$themename));
+                    i.fa.fa-chevron-circle-right

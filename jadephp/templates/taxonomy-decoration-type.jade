@@ -1,0 +1,70 @@
+- $title = get_queried_object()->name;
+- global $themename;
+doctype html
+html
+    head
+        - get_header();
+    body
+        section.slider.head-slider
+            include /mixins/slider.jade
+        section.header
+            include /mixins/header.jade
+        section.content
+            .container
+                .row
+                    .col-md-12.main-content
+                        include /mixins/page-head.jade
+                        .row
+                            - $cid = get_queried_object_id();
+                            - $args = array('orderby' => 'name','order' => 'ASC','hide_empty' => true, 'exclude' => array(),'number' => '','fields' => 'all','parent'  => '','hierarchical' => false,'child_of' => $cid, 'offset' => '');
+                            - $terms = get_terms('decoration-type', $args);
+                            - $i = 1;
+                            - if(!empty($terms) && sizeof($terms)>0):
+                            .page-line.col-md-12
+                                .page-container.pull-left
+                                    .page-heading
+                                        h3
+                                            - print($title);
+                                    .page-content.pull-left
+                                        .page-text
+                                            .gallery-row
+                                                - $term_images = get_option('decoration-type_term_images',$term_images);
+                                                - foreach($terms as $term):
+                                                - $image_id = $term_images[$term->term_id];
+                                                - $image_src = getImage('decoration', '400x210', $image_id);
+                                                - $title = $term->name;
+                                                - $count = $term->count.' ';
+                                                - $permalink = get_term_link($term);
+                                                include /mixins/decoration-type-block.jade
+                                                - if($i%3 == 0):
+                                                .col-md-12.hidden-sm.bottom-line-col
+                                                    .bottom-line
+                                                - print('</div><div class="gallery-row">')
+                                                - endif;
+                                                - $i++;
+                                                - endforeach;
+                            - else:
+                            - wp_reset_query();
+                            - query_posts(array ( 'post_type'=>'decoration', 'posts_per_page' => 1, 'order'=>'DESC', 'orderby'=> array('menu_order', 'ID') ,'tax_query' => array( array( 'taxonomy' => 'decoration-type','terms' => $cid, 'field' => 'term_id') ) ) );
+                            - if (have_posts()):
+                            - while (have_posts()):
+                            - the_post();
+                            include /mixins/decoration-post.jade
+                            - $related = get_metadata('post', $post->ID, 'ma_related_products', true);
+                            - endwhile;
+                            - if(!empty($related)):
+                            - wp_reset_query();
+                            - query_posts(array('post__in' => $related,'post_type'=> 'product'));
+                            - if (have_posts()):
+                            - $carousel_title = __('Recommended products',$themename);
+                            - $button_text = __('See all',$themename);
+                            - $button_link = get_post_type_archive_link( 'decoration' );
+                            .col-md-12.double-border-container
+                                .double-border-bottom
+                            include /mixins/related-carousel.jade
+                            - endif;
+                            - endif;
+                            - wp_reset_query();
+                            - endif;
+                            - endif;
+        - get_footer();

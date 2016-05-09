@@ -1,0 +1,9 @@
+.col-md-6.design-block
+    a(href!='<?php print(get_the_permalink()); ?>')
+        img.img-responsive(src!='<?php print($image_src); ?>', alt!='<?php print(get_the_title()); ?>')
+    .design-content.text-center
+        h3
+            - print(get_the_title());
+        p
+            - print(get_the_excerpt());
+    .under-container

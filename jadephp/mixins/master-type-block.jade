@@ -1,0 +1,12 @@
+.col-md-6.master-category-block
+    a.master-type-image-link(href!='<?php print($permalink); ?>')
+        img.img-responsive(src!='<?php print($image_src); ?>', alt!='<?php print($title); ?>')
+    .master-category-content.text-center
+        h3
+            a(href!='<?php print($permalink); ?>')
+                - print($title);
+        - if(!empty($description)):
+        p
+            - print($description);
+        - endif;
+    .under-container

@@ -1,0 +1,13 @@
+- if(sizeof($items) > 0):
+.gallery-small-pictures-scroll.mCustomScrollbar(data-mcs-theme="dark")
+   .row
+      - foreach($items as $item):
+      .col-md-6.col-sm-12.gallery-small-pictures-col
+         div(class!="gallery-small-pictures-container <?php if($item->ID == get_the_ID()) print('current'); ?>")
+            - $image_src = getImage('project', '170x85', $item->image_id);
+            img.img-responsive(src!="<?php print($image_src); ?>", alt!="<?php print($item->title); ?>")
+            a.gallery-small-ajax(href!="<?php print(get_the_permalink($item->ID)); ?>", data-id!="<?php print($item->ID); ?>", data-action="get" title!="<?php print($item->title); ?>")
+               span
+                  - print($item->title);
+      - endforeach;
+- endif;

@@ -1,0 +1,59 @@
+- /*Template Name:Decoration */
+- global $themename;
+doctype html
+html
+    head
+        - get_header();
+    body
+        section.slider.head-slider
+            include /mixins/slider.jade
+        section.header
+            include /mixins/header.jade
+        section.content
+            .container
+                .row
+                    .col-md-9.main-content.dekoration-page
+                        - if (have_posts()):
+                        - while (have_posts()):
+                        - the_post();
+                        - $current_page = (object) array();
+                        - $current_page = $post;
+                        include /mixins/page-head.jade
+                        - endwhile;
+                        - endif;
+                        - wp_reset_query();
+                        .row
+                            .decoration-posts
+                                - query_posts( array ( 'post_type' => 'page', 'post_parent' => $current_page->ID, 'order'=>'ASC','orderby'=> 'menu_order') );
+                                - if (have_posts()):
+                                - while (have_posts()):
+                                - the_post();
+                                - $image_id = get_post_thumbnail_id();
+                                - $image_src = getImage('group', '200x200', $image_id);
+                                - $product_price = get_metadata('post', $post->ID, '_regular_price', true);
+                                - $product_sale_price = get_metadata('post', $post->ID, '_sale_price', true);
+                                - $product_brand = array_shift(wc_get_product_terms($post->ID, 'pa_proizvoditel',array( 'fields' => 'names' )));
+                                include /mixins/decoration-block.jade
+                                - endwhile;
+                                - endif;
+                                - wp_reset_query();
+                            .col-md-12.question-col
+                                .btn-container.qestion-btn
+                                    a.btn.btn-primary(data-toggle="modal", data-target="#questionModal")
+                                        span
+                                            - print(__('Take a question', $themename));
+                                        |&nbsp;
+                                        i.fa.fa-question-circle
+                            - wp_reset_query();
+                            - $args = array('orderby' => 'name','order' => 'ASC','hide_empty' => true, 'exclude' => array(),'number' => '','fields' => 'all','parent'  => '','hierarchical' => false,'child_of' => 0, 'offset' => '');
+                            - $terms = get_terms('decoration-type', $args);
+                            - $term_images = get_option('decoration-type_term_images',$term_images);
+                            - $carousel_title = __('Decoration gallery',$themename);
+                            - $button_text = __('See all',$themename);
+                            - $button_link = get_post_type_archive_link( 'decoration' );
+                            include /mixins/related-carousel-taxonomy.jade
+                            - wp_reset_query();
+                    .col-md-3.sidebar
+                        include /templates/sidebar.jade
+        include /mixins/modal-question.jade
+        - get_footer();

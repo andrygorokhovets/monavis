@@ -1,0 +1,10 @@
+- global $themename
+#ajaxModal.modal.fade.ajax-modal(tabindex='-1', role='dialog', aria-labelledby='ajaxModalLabel')
+   .modal-dialog(role='document')
+      .modal-content
+         .modal-header.ajax-modal-header
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+               span(aria-hidden='true') &times;
+            h4#ajaxModalLabel.modal-title
+               - print(__('Course', $themename));
+         .modal-body.ajax-modal-body

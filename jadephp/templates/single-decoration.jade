@@ -1,0 +1,35 @@
+doctype html
+html
+    head
+        - get_header();
+    body
+        section.slider.head-slider
+            include /mixins/slider.jade
+        section.header
+            include /mixins/header.jade
+        section.content
+            .container
+                .row
+                    .col-md-12.main-content
+                        include /mixins/page-head.jade
+                        .row
+                            - $cid = array();
+                            - $categories = get_the_terms( $post->ID, 'decoration-type' );
+                            - foreach($categories as $category):
+                            - $cid[] = $category->term_id
+                            - endforeach;
+                            - $cid = join(',',$cid);
+                            include /mixins/decoration-post.jade
+                            - $related = get_metadata('post', $post->ID, 'ma_related_products', true);
+                            - wp_reset_query();
+                            - if(!empty($related)):
+                            - query_posts(array('post__in' => $related,'post_type'=> 'product'));
+                            - if (have_posts()):
+                            - $carousel_title = __('Recommended products',$themename);
+                            .col-md-12.double-border-container
+                                .double-border-bottom
+                            include /mixins/related-carousel.jade
+                            - endif;
+                            - wp_reset_query();
+                            - endif;
+        - get_footer();

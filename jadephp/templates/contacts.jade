@@ -1,0 +1,82 @@
+- /*Template Name:Contacts */
+- global $themename;
+- $map_link = get_option('ma_gmap');
+- $address = get_option('ma_adress');
+- $cell = get_option('ma_cphone');
+- $mobile = get_option('ma_mphone');
+- $worktime = get_option('ma_works');
+doctype html
+html
+    head
+        - get_header();
+    body
+        section.slider.head-slider
+            include /mixins/slider.jade
+        section.header
+            include /mixins/header.jade
+        section.content
+            .container
+                .row
+                    .col-md-12.main-content
+                        - if (have_posts()):
+                        - while (have_posts()):
+                        - the_post();
+                        include /mixins/page-head.jade
+                        .row
+                            .page-line.col-md-12.contact-page
+                                .page-container.pull-left
+                                    .page-heading
+                                        h3
+                                            - print(get_the_title());
+                                    .page-content.pull-left
+                                        .page-text
+                                            .col-md-12
+                                                - the_content();
+                                            .col-md-4
+                                                - print(do_shortcode('[gravityform id="2" name="Contact" title="false" description="false" ajax="true"]'));
+                                            .col-md-8
+                                                #map
+                                                .row.contact-info
+                                                    .col-md-4
+                                                        table.table
+                                                            tr
+                                                                td
+                                                                    p
+                                                                        - print(__('Address', $themename));
+                                                                    a(href!="<?php print($map_link); ?>")
+                                                                        i.fa.fa-map-marker
+                                                                        |&nbsp;
+                                                                        span
+                                                                            - print(__('Map', $themename));
+                                                                td
+                                                                    p
+                                                                        - print(nl2br($address));
+                                                    .col-md-4
+                                                        table.table
+                                                            tr
+                                                                td
+                                                                    p
+                                                                        - print(__('Phones', $themename));
+                                                                    a(href!="<?php print($map_link); ?>")
+                                                                        i.fa.fa-phone-square
+                                                                        |&nbsp;
+                                                                        span
+                                                                            - print(__('Call', $themename));
+                                                                td
+                                                                    p
+                                                                        - print($mobile);
+                                                                    p
+                                                                        - print($cell);
+                                                    .col-md-4
+                                                        table.table
+                                                            tr
+                                                                td
+                                                                    p
+                                                                        - print(__('Working regime', $themename));
+                                                                td
+                                                                    p
+                                                                        - print(nl2br($worktime));
+                        - endwhile;
+                        - endif;
+                        - wp_reset_query();
+        - get_footer();

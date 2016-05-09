@@ -1,0 +1,11 @@
+- global $themename;
+.modal.fade.mc-timetable-modal(tabindex='-1', role='dialog', aria-labelledby='questionTimetableLabel', id!="timetableMCModal")
+    .modal-dialog(role='document')
+        .modal-content
+            .modal-header
+                button.close(type='button', data-dismiss='modal', aria-label='Close')
+                    span(aria-hidden='true') &times;
+                h4#questionTimetableLabel.modal-title
+                    - print(__('Course', $themename));
+            .modal-body.mc-timetable-modal-body
+                - print(do_shortcode('[gravityform id="4" name="MCTimetable" title="false" description="false" ajax="true" field_values="post_name='.$post_title.'"]'));

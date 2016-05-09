@@ -1,0 +1,45 @@
+- global $themename;
+- $title = get_queried_object()->name;
+doctype html
+html
+    head
+        - get_header();
+    body
+        section.slider.head-slider
+            include /mixins/slider.jade
+        section.header
+            include /mixins/header.jade
+        section.content
+            .container
+                .row
+                    .col-md-12.main-content
+                        include /mixins/page-head.jade
+                        .row
+                            .page-line.col-md-12.interior-gallery
+                                .page-container.pull-left
+                                    .page-heading
+                                        h3
+                                            - print($title);
+                                        .btn-container.page-heading-order
+                                            a.btn.btn-primary(href!='<?php print(get_post_type_archive_link( "project" )); ?>')
+                                                span
+                                                    - print(__('See all',$themename));
+                                                i.fa.fa-chevron-circle-right
+                                    .page-content.pull-left
+                                        .page-text
+                                            - $cid = get_queried_object_id();
+                                            - query_posts(array('post_type'=> 'project', 'posts_per_page' => -1, 'tax_query' => array( array( 'taxonomy' => 'design-type','terms' => $cid, 'field' => 'term_id') )));
+                                            - if (have_posts()): $i = 1;
+                                            - while (have_posts()):
+                                            - the_post();
+                                            - $count = 0;
+                                            - if(easy_image_gallery_get_image_ids()):
+                                            - $photo_array = easy_image_gallery_get_image_ids();
+                                            - $count = sizeof($photo_array);
+                                            - endif;
+                                            include /mixins/gallery-block.jade
+                                            - if($i%4 == 0) print('<div class="clear"></div>');$i++;
+                                            - endwhile;
+                                            - endif;
+                                            - wp_reset_query();
+        - get_footer();

@@ -1,0 +1,25 @@
+doctype html
+html
+    head
+        - get_header();
+    body
+        section.slider.head-slider
+            include /mixins/slider.jade
+        section.header
+            include /mixins/header.jade
+        section.content
+            .container
+                .row
+                    .col-md-9.main-content
+                        include /mixins/page-head.jade
+                        .row
+                            - if (have_posts()):
+                            - while (have_posts()):
+                            - the_post();
+                            include /mixins/news-line.jade
+                            - endwhile;
+                            - endif;
+                            - wp_reset_query();
+                    .col-md-3.sidebar
+                        include /templates/sidebar.jade
+        - get_footer();

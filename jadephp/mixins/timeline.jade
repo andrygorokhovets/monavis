@@ -1,0 +1,24 @@
+.page-line.col-md-12.master-class-block
+    .page-container.pull-left
+        .page-heading
+            h3
+                - print(__('Timetable', $themename));
+            - if(is_single()):
+            .btn-container.page-heading-order
+                a.btn.btn-primary(data-toggle="modal", data-target!="#timetableMCModal")
+                    span
+                        - print(__('Course', $themename));
+                    | &nbsp;
+                    i.fa.fa-calendar-times-o
+            - endif;
+        .page-content.pull-left
+            .page-text
+                .col-md-12
+                    table.table.table-hover
+                        - foreach($timeline as $time):
+                        tr
+                            td
+                                - print($time['time']);
+                            td
+                                - print($time['title']);
+                        - endforeach;

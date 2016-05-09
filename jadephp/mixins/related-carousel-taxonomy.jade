@@ -1,0 +1,33 @@
+- if(sizeof($terms) > 0 ):
+.page-line.col-md-12.interior-carousel
+   .page-container.pull-left
+      .page-heading
+         - if(!empty($carousel_title)):
+         h3
+            - print($carousel_title);
+         - endif;
+         - if(!empty($button_text)):
+         .btn-container.page-heading-order
+            a.btn.btn-primary(href!='<?php print($button_link); ?>')
+               span
+                  - print($button_text);
+               i.fa.fa-chevron-circle-right
+         - endif;
+      .page-content.pull-left
+         .page-text
+            .carousel.carousel-block
+               .carousel-frame
+                  ul.carousel-slider
+                     - foreach($terms as $term):
+                     - $image_id = $term_images[$term->term_id];
+                     - $image_src = getImage('interior', '260x150', $image_id);
+                     - $title = $term->name;
+                     - $permalink = get_term_link($term);
+                     li.carousel-slide
+                        .carousel-slide-container
+                           img.img-responsive(src!="<?php print($image_src); ?>", alt!="<?php print($title); ?>")
+                           a.carousel-slide-info(href!="<?php print($permalink); ?>")
+                              span
+                                 - print($title);
+                     - endforeach;
+- endif;

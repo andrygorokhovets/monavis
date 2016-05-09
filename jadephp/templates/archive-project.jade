@@ -1,0 +1,42 @@
+- $post_type = get_post_type_object('project');
+- global $themename;
+doctype html
+html
+    head
+        - get_header();
+    body
+        section.slider.head-slider
+            include /mixins/slider.jade
+        section.header
+            include /mixins/header.jade
+        section.content
+            .container
+                .row
+                    .col-md-12.main-content
+                        include /mixins/page-head.jade
+                        .row
+                            .page-line.col-md-12.interior-gallery
+                                .page-container.pull-left
+                                    .page-heading
+                                        h3
+                                            - print($post_type->labels->name);
+                                    .page-content.pull-left
+                                        .page-text
+                                            - $posts_per_page = get_option('posts_per_page');
+                                            - $cpage = (get_query_var('paged')) ? get_query_var('paged') : 1;
+                                            - query_posts(array('posts_per_page' => $posts_per_page, 'paged' => $cpage, 'post_type'=> 'project'));
+                                            - if (have_posts()):
+                                            - while (have_posts()):
+                                            - the_post();
+                                            - $count = 0;
+                                            - if(easy_image_gallery_get_image_ids()):
+                                            - $photo_array = easy_image_gallery_get_image_ids();
+                                            - $count = sizeof($photo_array);
+                                            - endif;
+                                            include /mixins/gallery-block.jade
+                                            - endwhile;
+                                            .col-md-12
+                                                - wp_bootstrap_pagination();
+                                            - endif;
+                                            - wp_reset_query();
+        - get_footer();

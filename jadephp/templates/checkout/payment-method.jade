@@ -1,0 +1,12 @@
+
+li(class!='payment_method_<?php print $gateway->id; ?>')
+    .radio
+        input.input-radio(id!='payment_method_<?php print $gateway->id; ?>', type='radio', name='payment_method', value!='<?php print esc_attr( $gateway->id ); ?>', data-order_button_text!='<?php echo esc_attr( $gateway->order_button_text ); ?>', checked)
+        label(for!='payment_method_<?php print $gateway->id; ?>')
+            - print $gateway->get_title();
+            - print $gateway->get_icon();
+        - if ( $gateway->has_fields() || $gateway->get_description() ) :
+        //span(class!='payment_box payment_method_<?php print $gateway->id; ?>')
+            - $gateway->payment_fields();
+        - endif;
+

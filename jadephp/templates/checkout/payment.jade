@@ -1,0 +1,39 @@
+- $woo = 'woocommerce';
+- $terms = checked( apply_filters( 'woocommerce_terms_is_checked_default', isset( $_POST['terms'] ) ), true );
+
+- if ( ! is_ajax() ) :
+- do_action( 'woocommerce_review_order_before_payment' );
+- endif;
+
+#payment.woocommerce-checkout-payment
+    - if ( WC()->cart->needs_payment() ) :
+    ul.payment_methods.methods
+        - if ( ! empty( $available_gateways ) ) ;
+        - foreach ( $available_gateways as $gateway );
+        - wc_get_template( 'checkout/payment-method.php', array( 'gateway' => $gateway ) );
+        //- print '<p>' . apply_filters( 'woocommerce_no_available_payment_methods_message', $no_gateways_message ) . '</p>';
+    - endif;
+
+    .form-row.place-order
+        noscript
+            - _e( 'Since your browser does not support JavaScript, or it is disabled, please ensure you click the <em>Update Totals</em> button before placing your order. You may be charged more than the amount stated above if you fail to do so.', 'woocommerce' );
+            br
+            input.button(type='submit', name='woocommerce_checkout_update_totals', value!='_e( "Update totals", $woo );')
+
+        - wp_nonce_field( 'woocommerce-process_checkout' );
+        - do_action( 'woocommerce_review_order_before_submit' );
+        - print apply_filters( 'woocommerce_order_button_html', '<input type="submit" class="btn btn-info" name="woocommerce_checkout_place_order" id="place_order" value="' . esc_attr( $order_button_text ) . '" data-value="' . esc_attr( $order_button_text ) . '" />' );
+        - if ( wc_get_page_id( 'terms' ) > 0 && apply_filters( 'woocommerce_checkout_show_terms', true ) ) :
+        p.form-row.terms
+            label.checkbox(for='terms')
+                - printf( __( 'I have read and accept the <a href="%s" target="_blank">terms &amp; conditions</a>', $woo ), esc_url( wc_get_page_permalink( 'terms' ) ) );
+            input#terms.input-checkbox(type='checkbox', name='terms', '$terms')
+        - endif;
+        - do_action( 'woocommerce_review_order_after_submit' );
+    .clear
+
+
+- if ( ! is_ajax() ) :
+- do_action( 'woocommerce_review_order_after_payment' );
+- endif;
+

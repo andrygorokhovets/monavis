@@ -1,0 +1,11 @@
+- global $themename;
+.modal.fade.mc-question-modal(tabindex='-1', role='dialog', aria-labelledby='orderDesignModalLabel', id!="orderDesignModal" )
+    .modal-dialog(role='document')
+        .modal-content
+            .modal-header
+                button.close(type='button', data-dismiss='modal', aria-label='Close')
+                    span(aria-hidden='true') &times;
+                h4#orderDesignModalLabel.modal-title
+                    - print(__('Order design', $themename));
+            .modal-body.mc-question-modal-body
+                - print(do_shortcode('[gravityform id="5" name="designOrder" title="false" description="false" ajax="true" field_values="post_name='.$post_title.'"]'));

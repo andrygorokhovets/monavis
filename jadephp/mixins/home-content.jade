@@ -1,0 +1,22 @@
+.categories-content
+    .row.category-blocks
+        - if (class_exists('wpMenu', false)):
+        - $wpM = new wpMenu('home-menu');
+        - $firstMenuLevel = $wpM->getMenu(0);
+        - $i = 1;
+        - foreach($firstMenuLevel as $menu_item_0):
+        - $image_id = $menu_item_0->thumbnail;
+        - $image_src = getImage('blocks', '430x300', $image_id);
+        - if(!empty($menu_item_0->title) && !empty($image_src)):
+        .col-md-6.col-sm-6.category-block
+            a(class!='<?php print($menu_item_0->class." ".$menu_item_0->megaclass); ?>', href!='<?php print($menu_item_0->link); ?>', title!='<?php print($menu_item_0->title); ?>')
+                img(src!="<?php print($image_src); ?>", alt!='<?php print($menu_item_0->title); ?>')
+                span
+                    - print($menu_item_0->title);
+        - if($i%2 == 0 && $i!=sizeof($firstMenuLevel)):
+        - print('</div><div class="row category-blocks">');
+        - endif;
+        - $i++;
+        - endif;
+        - endforeach;
+        - endif;

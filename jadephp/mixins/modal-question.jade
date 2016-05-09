@@ -1,0 +1,11 @@
+- global $themename
+#questionModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='questionModalLabel')
+    .modal-dialog(role='document')
+        .modal-content
+            .modal-header
+                button.close(type='button', data-dismiss='modal', aria-label='Close')
+                    span(aria-hidden='true') &times;
+                h4#questionModalLabel.modal-title
+                    - print(__('Take a question', $themename));
+            .modal-body
+                - print(do_shortcode('[gravityform id="1" name="Question" title="false" description="false" ajax="true"]'));

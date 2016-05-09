@@ -1,0 +1,64 @@
+doctype html
+html
+    head
+        - get_header();
+    body
+        section.slider.head-slider
+            include /mixins/slider.jade
+        section.header
+            include /mixins/header.jade
+        section.content
+            .container
+                .row
+                    .col-md-12.main-content.single-project
+                        include /mixins/page-head.jade
+                        .row
+                            - if (have_posts()):
+                            - while (have_posts()):
+                            - the_post();
+                            .gallery-line
+                                .col-md-8.gallery-big-picture
+                                    - $thumbnail_id = get_post_thumbnail_id();
+                                    - $thumbnail_src = getImage('group', '200x200', $thumbnail_id);
+                                    - $big_image_src = getImage('project_big', '800x380', $thumbnail_id);
+                                    - $full_image_src = getPostImage();
+                                    - if(!empty($thumbnail_id )):
+                                    a.lightbox.decoration-big-picture(href!="<?php print($full_image_src); ?>", data-options!="thumbnail:'<?php print($thumbnail_src); ?>'")
+                                        img.img-responsive(src!="<?php print($big_image_src); ?>", alt!="<?php print(get_the_title()); ?>")
+                                    - endif;
+                                .col-md-4.gallery-small-pictures
+                                    - if(easy_image_gallery_get_image_ids()):
+                                    - $gallery = easy_image_gallery_get_image_ids();
+                                    include /mixins/project-gallery.jade
+                                    - endif;
+                            .page-line.col-md-12.interior-info
+                                .page-container.pull-left
+                                    .page-heading
+                                        h3
+                                            - print(get_the_title());
+                                        .btn-container.page-heading-order
+                                            a.btn.btn-primary(href!="<?php print(get_post_type_archive_link('project')); ?>")
+                                                span
+                                                    - print __('All projects',$themename);
+                                                i.fa.fa-chevron-circle-right
+                                    .page-content.pull-left
+                                        .page-text
+                                                - the_content();
+                            - $related = get_metadata('post', $post->ID, 'ma_related_products', true);
+                            - endwhile;
+                            - wp_reset_query();
+                            - if(!empty($related)):
+                            - query_posts(array('post__in' => $related,'post_type'=> 'decoration'));
+                            - if (have_posts()):
+                            - $carousel_title = __('Recommended decoration',$themename);
+                            - $button_text = __('Order design', $themename);
+                            - $button_link = '#orderDesignModal';
+                            .col-md-12.double-border-container
+                                .double-border-bottom
+                            include /mixins/related-carousel.jade
+                            - endif;
+                            - wp_reset_query();
+                            - endif;
+                            - endif;
+        include /mixins/modal-design-order.jade
+        - get_footer();

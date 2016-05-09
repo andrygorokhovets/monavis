@@ -1,0 +1,41 @@
+.page-line.col-md-12.master-class-block
+    .page-container.pull-left
+        .page-heading
+            h3
+                //- print(get_the_title());
+                a(href!="<?php print(get_the_permalink()); ?>")
+                    - print(get_the_title());
+        .page-content.pull-left
+            .page-text
+                - $thumbnail_id = get_post_thumbnail_id();
+                - $thumbnail_src = getImage('group', '200x200', $thumbnail_id);
+                - $big_image_src = getImage('design', '550x250', $thumbnail_id);
+                - $full_image_src = getPostImage();
+                - if(!empty($full_image_src)):
+                .col-md-8
+                    a.lightbox.decoration-big-picture(href!="<?php print($full_image_src); ?>", data-options!="thumbnail:'<?php print($thumbnail_src); ?>'", rel!="ilightbox[gallery<?php print(get_the_ID()); ?>]")
+                        img.img-responsive(src!="<?php print($big_image_src); ?>", alt!="<?php print(get_the_title()); ?>")
+                - endif;
+                .col-md-4
+                    p
+                        - print(get_the_excerpt());
+                    .button-cols
+                        .button-col
+                            .btn-container
+                                a.btn.btn-primary(data-toggle="modal", data-target!="#questionMCModal")
+                                    span
+                                        - print(__('Questions', $themename));
+                                    |&nbsp;
+                                    i.fa.fa-question-circle
+                        .button-col
+                            .btn-container
+                                a.btn.btn-primary(data-toggle="modal", data-target!="#timetableMCModal")
+                                    span
+                                        - print(__('Course', $themename));
+                                    |&nbsp;
+                                    i.fa.fa-calendar-times-o
+                .col-md-12
+                    - if(easy_image_gallery_get_image_ids()):
+                    - $gallery = easy_image_gallery_get_image_ids();
+                    include /mixins/master-class-gallery.jade
+                    - endif;

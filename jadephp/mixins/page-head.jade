@@ -1,0 +1,50 @@
+- global $themename;
+.row.page-head
+    .col-md-12
+        - if (class_exists('wpBreadcrumbs', false)):
+        - $BC = new wpBreadcrumbs('<i class="fa fa-home"></i>','<i class="fa fa-angle-right"></i>',$post_types = array('decoration'=>'decoration-type','product'=>'product_cat','master'=>'master-type','project'=>'design-type'));
+        - $breadcrumbs = $BC->getBreadcrumbs();
+        - if(count($breadcrumbs) > 0):
+        .breadcrumbs.hidden-xs
+            h1.page-title(itemscope, itemtype="http://data-vocabulary.org/Breadcrumb")
+                a(href!="<?php print($breadcrumbs[0]['link']); ?>", itemprop="url")
+                    span.icon
+                        - print($breadcrumbs[0]['icon']);
+                    span(itemprop="title")
+                        - print($breadcrumbs[0]['text']);
+                - unset($breadcrumbs[0]);
+                - foreach($breadcrumbs as $breadcrumb):
+                - if($breadcrumb['text']):
+                span(itemprop="child", itemscope, itemtype="http://data-vocabulary.org/Breadcrumb")
+                    - if(!empty($breadcrumb['link'])):
+                    a(href!="<?php print($breadcrumb['link']); ?>", itemprop="url")
+                        span.icon
+                            - print($breadcrumb['icon']);
+                        span(itemprop="title")
+                            - print($breadcrumb['text']);
+                    - else:
+                        span.icon
+                            - print($breadcrumb['icon']);
+                        span(itemprop="title")
+                            - print($breadcrumb['text']);
+                    - endif;
+                - endif;
+                - endforeach;
+        - endif;
+        - endif;
+        - if(is_tax('product_cat')):
+        - $cid = get_queried_object_id();
+        - $args = array('orderby' => 'name','order' => 'ASC','hide_empty' => true, 'exclude' => array(),'number' => '','fields' => 'all','parent'  => $cid,'hierarchical' => false,'child_of' => $cid, 'offset' => '');
+        - $terms = get_terms('product_cat', $args);
+        - $display_type = get_woocommerce_term_meta( $cid, 'display_type', true );
+        - if(empty($terms) || sizeof($terms)<1 || $display_type == 'products'):
+        .product-filters
+            .product-filter
+                a.btn.btn-default(href="#", data-filter="*")
+                    - print(__('All products', $themename));
+            .product-filter
+                a.btn.btn-default(href="#", data-filter=".sale")
+                    - print(__('Sale products', $themename));
+        - endif;
+        - endif;
+        .double-border-bottom

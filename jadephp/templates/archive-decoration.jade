@@ -1,0 +1,44 @@
+- $post_type = get_post_type_object('decoration');
+- global $themename;
+doctype html
+html
+    head
+        - get_header();
+    body
+        section.slider.head-slider
+            include /mixins/slider.jade
+        section.header
+            include /mixins/header.jade
+        section.content
+            .container
+                .row
+                    .col-md-12.main-content
+                        include /mixins/page-head.jade
+                        .row
+                            .page-line.col-md-12
+                                .page-container.pull-left
+                                    .page-heading
+                                        h3
+                                            - print($post_type->labels->singular_name);
+                                    .page-content.pull-left
+                                        .page-text
+                                            .gallery-row
+                                                - $args = array('orderby' => 'name','order' => 'ASC','hide_empty' => true, 'exclude' => array(),'number' => '','fields' => 'all','parent'  => '','hierarchical' => false,'child_of' => 0, 'offset' => '');
+                                                - $terms = get_terms('decoration-type', $args);
+                                                - $term_images = get_option('decoration-type_term_images',$term_images);
+                                                - $i = 1;
+                                                - foreach($terms as $term):
+                                                - $image_id = $term_images[$term->term_id];
+                                                - $image_src = getImage('decoration', '400x210', $image_id);
+                                                - $title = $term->name;
+                                                - $count = $term->count.' ';
+                                                - $permalink = get_term_link($term);
+                                                include /mixins/decoration-type-block.jade
+                                                - if($i%3 == 0):
+                                                .col-md-12.hidden-sm.bottom-line-col
+                                                    .bottom-line
+                                                - print('</div><div class="gallery-row">');
+                                                - endif;
+                                                - $i++;
+                                                - endforeach;
+        - get_footer();

@@ -1,0 +1,43 @@
+doctype html
+html
+    head
+        - get_header();
+    body
+        section.slider.head-slider
+            include /mixins/slider.jade
+        section.header
+            include /mixins/header.jade
+        section.content
+            .container
+                .row
+                    .col-md-9.main-content
+                        include /mixins/page-head.jade
+                        .row
+                            - print(get_the_content());
+                            - $posts_per_page = get_option('posts_per_page');
+                            - $cpage = (get_query_var('paged')) ? get_query_var('paged') : 1;
+                            - query_posts( array ( 'posts_per_page' => $posts_per_page, 'paged' => $cpage, 'post_type' => 'literature'));
+                            - if (have_posts()):
+                            - while (have_posts()):
+                            - the_post();
+                            include /mixins/literature-line.jade
+                            - endwhile;
+                            .col-md-12
+                                - wp_bootstrap_pagination();
+                            - endif;
+                            - wp_reset_query();
+                    .col-md-3.sidebar
+                        include /templates/sidebar.jade
+        - get_footer();
+
+
+
+
+
+
+
+
+
+
+
+

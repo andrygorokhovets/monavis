@@ -1,0 +1,6 @@
+- define('WP_USE_THEMES', false); require_once('../../../wp-load.php'); global $wbpb,$woocommerce;
+- ini_set('default_charset', 'UTF-8'); header('Content-Type: text/plain');
+- $fID = $_POST['fid']; $postName = $_POST['post_name'];
+- if(!empty($fID)):
+- print(do_shortcode('[gravityform id="'.$fID.'" title="false" description="false" ajax="true" postName = "'.$postName.'"]'));
+- endif;

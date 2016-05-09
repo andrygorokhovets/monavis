@@ -1,0 +1,39 @@
+.col-md-4.product_cat-block
+    .product_cat-container
+        a.product_cat-block-img(href!="<?php print($permalink); ?>")
+            img.img-responsive(src!="<?php print($image_src); ?>", alt!="<?php print($title); ?>")
+        .product_cat-info
+            a(href!="<?php print($permalink); ?>")
+                - print($title);
+        - $childargs = array('orderby' => 'name','order' => 'ASC','hide_empty' => true, 'exclude' => array(),'number' => '','fields' => 'all','parent'  => $cat_id,'hierarchical' => false,'child_of' => $cat_id, 'offset' => '');
+        - $childterms = get_terms('product_cat', $childargs);
+        - if(!empty($childterms) && sizeof($childterms)>0):
+        ul.product_cat-list
+            - foreach($childterms as $childterm):
+            - $childtitle = $childterm->name;
+            - $childpermalink = get_term_link($childterm);
+            - $childcat_id = $childterm->term_id;
+            - if(!empty($childtitle)):
+            - $childchildargs = array('orderby' => 'name','order' => 'ASC','hide_empty' => true, 'exclude' => array(),'number' => '','fields' => 'all','parent'  => $childcat_id,'hierarchical' => false,'child_of' => $childcat_id, 'offset' => '');
+            - $childchildterms = get_terms('product_cat', $childchildargs);
+            - $childchilds = false;
+            - if(!empty($childchildterms) && sizeof($childchildterms)>0):
+            - $childchilds = true;
+            - endif;
+            li(class!='<?php if($childchilds) print("parent-cat"); ?>')
+                a(href!="<?php print($childpermalink); ?>")
+                    - print($childtitle);
+                - if($childchilds):
+                ul
+                    - foreach($childchildterms as $childchildterm):
+                    - $childchildtitle = $childchildterm->name;
+                    - $childchildpermalink = get_term_link($childchildterm);
+                    - $childchildcat_id = $childchildterm->term_id;
+                    li
+                        a(href!="<?php print($childchildpermalink); ?>")
+                            - print($childchildtitle);
+                    - endforeach;
+                - endif;
+            - endif;
+            - endforeach;
+        - endif;

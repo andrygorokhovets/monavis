@@ -1,0 +1,32 @@
+- /*Template Name:Design */
+doctype html
+html
+    head
+        - get_header();
+    body
+        section.slider.head-slider
+            include /mixins/slider.jade
+        section.header
+            include /mixins/header.jade
+        section.content
+            .container
+                .row
+                    .col-md-12.main-content
+                        include /mixins/page-head.jade
+                        .row.design-row
+                            - $current_page = (object) array();
+                            - $current_page = $post;
+                            - query_posts( array ( 'post_type' => 'page', 'post_parent' => $current_page->ID, 'order'=>'ASC','orderby'=> 'menu_order' ) );
+                            - if (have_posts()):
+                            - $k = 1;
+                            - while (have_posts()):
+                            - the_post();
+                            - $image_id = get_post_thumbnail_id();
+                            - $image_src = getImage('design', '550x250', $image_id);
+                            include /mixins/design-block.jade
+                            - if($k%2 == 0) print('<div class="clear"></div>');$k++;
+                            - endwhile;
+                            - endif;
+                            - wp_reset_query();
+
+        - get_footer();

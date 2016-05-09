@@ -1,0 +1,13 @@
+- $post_type = get_post_type();
+- if( is_tax('product_cat') || is_single() && $post_type == 'product' || is_post_type_archive('product')):
+- global $themename;
+include /mixins/cart-sidebar.jade
+- endif;
+aside.news
+    include /mixins/news-sidebar-block.jade
+aside.news.actions
+    include /mixins/actions-sidebar-block.jade
+aside.news
+    include /mixins/articles-sidebar-block.jade
+aside.news
+    include /mixins/literature-sidebar-block.jade

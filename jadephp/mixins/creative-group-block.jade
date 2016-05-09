@@ -1,0 +1,18 @@
+- $team_position = get_post_meta($post->ID,'ma_team_position', true);
+- $image_id = get_post_thumbnail_id();
+- $image_src = getImage('group', '200x200', $image_id);
+
+.row.creative-group
+    .col-md-4.creative-group-info
+        .row
+            .col-md-6.text-center
+                h3.creative-group-name
+                    - print(get_the_title());
+                .creative-group-position
+                    h4
+                        - print($team_position);
+            .col-md-6.creative-group-photo
+                img.img-responsive(src!='<?php print($image_src); ?>' alt!='<?php print(get_the_title()); ?>')
+    .col-md-8.creative-group-text
+        p
+            - print(get_the_content());

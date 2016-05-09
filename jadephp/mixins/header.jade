@@ -1,0 +1,47 @@
+.container
+    .row
+        .col-md-9.header-menu
+            .navbar.navbar-default(role='navigation')
+                .navbar-header
+                    button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+                        span.sr-only Toggle navigation
+                        span.icon-bar
+                        span.icon-bar
+                        span.icon-bar
+                    a.navbar-brand(href='/')
+                        span
+                            img(src!="<?php echo get_template_directory_uri(); ?>/assets/img/logo.png", alt="")
+                .navbar-collapse.collapse
+                    ul.nav.navbar-nav
+                        - if (class_exists('wpMenu', false)):
+                        - $wpM = new wpMenu('top-menu');
+                        - $firstMenuLevel = $wpM->getMenu(0);
+                        - foreach($firstMenuLevel as $menu_item_0):
+                        li(class!='<?php print($menu_item_0->class." ".$menu_item_0->megaclass); ?>')
+                            a(href!='<?php print($menu_item_0->link); ?>', title!='<?php print($menu_item_0->title); ?>')
+                                - print($menu_item_0->title);
+                        - endforeach;
+                        - endif;
+        .col-md-3.header-sidebar.text-right
+            - $fb = get_option('ma_fb');
+            - if(!empty($fb)):
+            a.social-link.facebook(href!="<?php print($fb); ?>")
+                i.fa.fa-facebook
+            - endif;
+            - $vk = get_option('ma_vk');
+            - if(!empty($vk)):
+            a.social-link.vk(href!="<?php print($vk); ?>")
+                i.fa.fa-vk
+            - endif;
+            - $pi = get_option('ma_pi');
+            - if(!empty($pi)):
+            a.social-link.pinterest(href!="<?php print($pi); ?>")
+                i.fa.fa-pinterest
+            - endif;
+            - $im = get_option('ma_im');
+            - if(!empty($im)):
+            a.social-link.instagram(href!="<?php print($im); ?>")
+                i.fa.fa-instagram
+            - endif;
+        .col-md-12.hidden-sm.bottom-line-col
+            .bottom-line

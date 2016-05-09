@@ -1,0 +1,9 @@
+dl.variation
+    - foreach ( $item_data as $data ):
+    - $key = sanitize_text_field( $data['key'] );
+    dt(class!='variation-<?php echo sanitize_html_class( $key );?>')
+        - print wp_kses_post( $data['key'] );
+        |:
+    dd(class!='print sanitize_html_class( $key );')
+        - print wp_kses_post( wpautop( $data['value'] ) );
+    - endforeach;

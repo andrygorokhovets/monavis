@@ -1,0 +1,11 @@
+.col-md-4.gallery-block
+   a.gallery-block-img(href!="<?php print($permalink); ?>")
+      img.img-responsive(src!="<?php print($image_src); ?>", alt!="<?php print($title); ?>")
+   .gallery-info
+      a(href!="<?php print($permalink); ?>")
+         - print($title);
+      - if(!empty($count)):
+      span
+       - print($count);
+       - print(__('Photo', $themename));
+      - endif;

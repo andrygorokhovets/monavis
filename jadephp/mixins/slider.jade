@@ -1,0 +1,35 @@
+#monCarousel.carousel.slide(data-ride='carousel')
+    ol.carousel-indicators
+        - global $wpdb;
+        - $slides_count = $wpdb->get_var('SELECT COUNT(*) FROM wp_posts AS p WHERE p.post_type="slide" AND p.post_status = "publish"');
+        - for($i=0; $i<$slides_count; $i++):
+        - if($i==0):
+        li.active(data-target="#monCarousel", data-slide-to!="<?php print($i); ?>")
+        - else:
+        li(data-target="#monCarousel", data-slide-to!="<?php print($i); ?>")
+        - endif;
+        - endfor;
+    .carousel-inner(role='listbox')
+        - $slider = new WP_Query( array ( 'post_type' => 'slide'));
+        - if ( $slider->have_posts() ):
+        - while ( $slider->have_posts() ):
+        - $slider->the_post();
+        - $image_id = get_post_thumbnail_id();
+        - $image_src = getImage('slide', '1920x600', $image_id);
+        .item(style!="background-image:url(<?php print $image_src; ?>")
+            img.visible-xs.background-img(src!='<?php print $image_src; ?>')
+            .container
+                h2
+                    - the_excerpt();
+        - endwhile;
+        - endif;
+        - wp_reset_query();
+    a.left.carousel-control.hidden-xs(href='#monCarousel', role='button', data-slide='prev')
+        span.glyphicon.glyphicon-chevron-left(aria-hidden='true')
+        span.sr-only Previous
+    a.right.carousel-control.hidden-xs(href='#monCarousel', role='button', data-slide='next')
+        span.glyphicon.glyphicon-chevron-right(aria-hidden='true')
+        span.sr-only Next
+
+
+

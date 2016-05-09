@@ -1,0 +1,50 @@
+- $woo = 'woocommerce';
+
+- if ( get_option( 'woocommerce_enable_shipping_calc' ) === 'no' || ! WC()->cart->needs_shipping() );
+- return;
+
+- do_action( 'woocommerce_before_shipping_calculator' );
+
+form.woocommerce-shipping-calculator(action!='<?php print esc_url( WC()->cart->get_cart_url() ); ?>', method='post')
+   p
+      a.shipping-calculator-button(href='#')
+         - _e( 'Calculate Shipping', $woo );
+   section.shipping-calculator-form(style='display:none;')
+      p#calc_shipping_country_field.form-row.form-row-wide
+         select#calc_shipping_country.country_to_state(name='calc_shipping_country', rel='calc_shipping_state')
+            option(value='')
+               - _e( 'Select a country&hellip;', $woo );
+            - foreach( WC()->countries->get_shipping_countries() as $key => $value );
+            - print '<option value="' . esc_attr( $key ) . '"' . selected( WC()->customer->get_shipping_country(), esc_attr( $key ), false ) . '>' . esc_html( $value ) . '</option>';
+
+      p#calc_shipping_state_field.form-row.form-row-wide
+         - $current_cc = WC()->customer->get_shipping_country();
+         - $current_r = WC()->customer->get_shipping_state();
+         - $states = WC()->countries->get_states( $current_cc );
+
+         - if ( is_array( $states ) && empty( $states ) );
+         input#calc_shipping_state(type='hidden', name='calc_shipping_state', placeholder!='_e( "State / county", $woo );')
+
+         - if ( is_array( $states ) );
+         span
+            select#calc_shipping_state(name='calc_shipping_state', placeholder!='_e( "State / county", $woo );')
+               option(value='')
+                  - _e( 'Select a state&hellip;', $woo );
+               - foreach ( $states as $ckey => $cvalue );
+               - print '<option value="' . esc_attr( $ckey ) . '" ' . selected( $current_r, $ckey, false ) . '>' . __( esc_html( $cvalue ), $woo ) .'</option>';
+
+         input#calc_shipping_state.input-text(type='text', value!='<?php print esc_attr( $current_r ); ?>', placeholder!='_e( "State / county", $woo );', name='calc_shipping_state' )
+
+      - if ( apply_filters( 'woocommerce_shipping_calculator_enable_city', false ) ) :
+
+      p#calc_shipping_city_field.form-row.form-row-wide
+         input#calc_shipping_city.input-text(type='text', value!='<?php print esc_attr( WC()->customer->get_shipping_city() ); ?>', placeholder!='<?php _e( "City", $woo ); ?>', name='calc_shipping_city')
+
+      - endif;
+
+      p
+         button.button(type='submit', name='calc_shipping', value='1')
+            - _e( 'Update Totals', $woo );
+
+- do_action( 'woocommerce_after_shipping_calculator' );
+

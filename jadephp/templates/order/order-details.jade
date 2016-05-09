@@ -1,0 +1,180 @@
+- $order = wc_get_order( $order_id );
+.col-md-6
+    h3
+        - _e( 'Order Details', 'woocommerce' );
+    table.shop_table.order_details.table.table-hover
+        thead
+            tr
+                th.product-name
+                    - _e( 'Product', 'woocommerce' );
+                th.product-total
+                    -  _e( 'Total', 'woocommerce' );
+        tbody
+            - if ( sizeof($order->get_items()) > 0 ):
+            - foreach( $order->get_items() as $item_id => $item ):
+            - $_product  = apply_filters( 'woocommerce_order_item_product', $order->get_product_from_item( $item ), $item );
+            - $item_meta = new WC_Order_Item_Meta( $item['item_meta'], $_product );
+            - if ( apply_filters('woocommerce_order_item_visible', true, $item) ):
+            tr(class="<?php echo esc_attr( apply_filters( 'woocommerce_order_item_class', 'order_item', $item, $order ) ); ?>")
+                td.product-name
+                    - if ( $_product && !$_product->is_visible() ) :
+                    - print apply_filters( 'woocommerce_order_item_name', $item['name'], $item );
+                    - else:
+                    - print apply_filters( 'woocommerce_order_item_name', sprintf( '<a href="%s">%s</a>', get_permalink( $item['product_id'] ), $item['name'] ), $item );
+                    - endif;
+                    - print apply_filters( 'woocommerce_order_item_quantity_html', ' <strong class="product-quantity">' . sprintf( '&times; %s', $item['qty'] ) . '</strong>', $item );
+                    - do_action( 'woocommerce_order_item_meta_start', $item_id, $item, $order );
+                    - $item_meta->display();
+                    - if ( $_product && $_product->exists() && $_product->is_downloadable() && $order->is_download_permitted() ) :
+                    - $download_files = $order->get_item_downloads( $item );
+                    - $i = 0;
+                    - $links = array();
+                    - foreach ( $download_files as $download_id => $file ) :
+                    - $i++;
+                    - $links[] = '<small><a href="' . esc_url( $file['download_url'] ) . '">' . sprintf( __( 'Download file%s', 'woocommerce' ), ( count( $download_files ) > 1 ? ' ' . $i . ': ' : ': ' ) ) . esc_html( $file['name'] ) . '</a></small>';
+                    - endforeach;
+                    - print '<br/>' . implode( '<br/>', $links );
+                    - endif
+                    - do_action( 'woocommerce_order_item_meta_end', $item_id, $item, $order );
+                td.product-total
+                    - print $order->get_formatted_line_subtotal( $item );
+            - endif
+            - endforeach;
+            - if ( $order->has_status(array('completed', 'processing')) && ( $purchase_note = get_post_meta($_product->id, '_purchase_note', true) ) ) :
+            tr.product-purchase-note
+                td(colspan="3")
+                    - print wpautop( do_shortcode( wp_kses_post( $purchase_note ) ) );
+            - endif;
+            - endif;
+        - do_action( 'woocommerce_order_items_table', $order );
+
+        - $has_refund = false;
+        - if ( $total_refunded = $order->get_total_refunded()):
+        - $has_refund = true;
+        - endif;
+
+        - if ( $totals = $order->get_order_item_totals()) :
+
+        - foreach ( $totals as $key => $total ):
+
+        - if(!in_array($key, array('shipping', 'payment_method'))):
+
+        - $value = $total['value'];
+
+        - if ( $has_refund && $key === 'order_total' ):
+
+        - $refunded_tax_del = '';
+        - $refunded_tax_ins = '';
+
+        - if ( wc_tax_enabled() && 'incl' == $order->tax_display_cart ):
+
+        - $tax_del_array = array();
+        - $tax_ins_array = array();
+
+        - if ( 'itemized' == get_option('woocommerce_tax_total_display') ):
+        - foreach ( $order->get_tax_totals() as $code => $tax ):
+        - $tax_del_array[] = sprintf( '%s %s', $tax->formatted_amount, $tax->label );
+        - $tax_ins_array[] = sprintf( '%s %s', wc_price( $tax->amount - $order->get_total_tax_refunded_by_rate_id( $tax->rate_id ), array( 'currency' => $order->get_order_currency() ) ), $tax->label );
+        - endforeach;
+        - else:
+        - $tax_del_array[] = sprintf( '%s %s', wc_price( $order->get_total_tax(), array( 'currency' => $order->get_order_currency() ) ), WC()->countries->tax_or_vat() );
+        - $tax_ins_array[] = sprintf( '%s %s', wc_price( $order->get_total_tax() - $order->get_total_tax_refunded(), array( 'currency' => $order->get_order_currency() ) ), WC()->countries->tax_or_vat() );
+        - endif;
+
+        - if ( !empty($tax_del_array)):
+        - $refunded_tax_del .= ' ' . sprintf( __( '(Includes %s)', 'woocommerce' ), implode( ', ', $tax_del_array ) );
+        - endif;
+
+        - if ( !empty($tax_ins_array) ) :
+        - $refunded_tax_ins .= ' ' . sprintf( __( '(Includes %s)', 'woocommerce' ), implode( ', ', $tax_ins_array ) );
+        - endif;
+
+        - endif;
+        - $value = '<del>' . strip_tags( $order->get_formatted_order_total() ) . $refunded_tax_del . '</del> <ins>' . wc_price( $order->get_total() - $total_refunded, array( 'currency' => $order->get_order_currency() ) ) . $refunded_tax_ins . '</ins>';
+        - endif;
+
+        tr
+            th(scope="row")
+                - print $total['label'];
+            td
+                - print $value;
+        - endif;
+        - endforeach;
+        - endif;
+
+        - if($has_refund):
+        tr
+            th(scope="row")
+                - print __( 'Refunded:', 'woocommerce' );
+            td
+                - print wc_price( $total_refunded, array( 'currency' => $order->get_order_currency() ) );
+        - endif;
+
+        - if('' != $order->customer_note):
+        tr
+            th(scope="row")
+                - print __( 'Note:', 'woocommerce' );
+            td
+                - print wptexturize( $order->customer_note );
+        - endif;
+    - do_action( 'woocommerce_order_details_after_order_table', $order );
+
+.col-md-6
+    h3
+        - print __( 'Address', 'woocommerce');
+    table.shop_table.table.table-hover.table-address
+        tbody
+            - if(!empty($order->shipping_first_name)):
+            tr
+                td
+                    - print __( 'First Name', 'woocommerce');
+                td
+                    - print $order->shipping_first_name;
+            - endif;
+            tr
+                td
+                    - print __( 'Last Name', 'woocommerce');
+                td
+                    - print $order->shipping_last_name;
+            tr
+                td
+                    - print __( 'Company Name', 'woocommerce');
+                td
+                    - print $order->shipping_company;
+            tr
+                td
+                    - print __( 'Address', 'woocommerce');
+                td
+                    - print $order->shipping_address_1;
+                    |&nbsp;
+                    - print $order->shipping_address_2;
+            tr
+                td
+                    - print __( 'City', 'woocommerce');
+                td
+                    - print $order->shipping_city;
+            tr
+                td
+                    - print __( 'County', 'woocommerce');
+                td
+                    - print $order->shipping_state;
+            tr
+                td
+                    - print __( 'Postcode', 'woocommerce');
+                td
+                    - print $order->shipping_postcode;
+            tr
+                td
+                    - print __( 'Country', 'woocommerce');
+                td
+                    - print $order->shipping_country;
+            tr
+                td
+                    - print __( 'Phone', 'woocommerce');
+                td
+                    - print $order->billing_phone;
+            tr
+                td
+                    - print __( 'Email Address', 'woocommerce');
+                td
+                    - print $order->billing_email;

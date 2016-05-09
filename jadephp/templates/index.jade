@@ -1,0 +1,18 @@
+doctype html
+html
+    head
+        - get_header();
+    body
+        section.slider.head-slider
+            include /mixins/slider.jade
+        section.header
+            include /mixins/header.jade
+        section.content
+            .container
+                .row
+                    .col-md-9.col-sm-12.main-content
+                        include /mixins/home-content.jade
+                        .double-border-bottom
+                    .col-md-3.col-sm-12.sidebar
+                        include /templates/sidebar.jade
+        - get_footer();

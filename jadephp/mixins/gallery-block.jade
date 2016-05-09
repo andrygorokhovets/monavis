@@ -1,0 +1,12 @@
+- $image_id = get_post_thumbnail_id();
+- $image_src = getImage('interior', '260x150', $image_id);
+.col-md-3.gallery-block
+    a.gallery-block-img(href!="<?php print(get_the_permalink()); ?>")
+        img.img-responsive(src!="<?php print($image_src); ?>", alt!="<?php print(get_the_permalink()); ?>")
+    .gallery-info
+        a(href!="<?php print(get_the_permalink()); ?>")
+            - print(get_the_title());
+        span
+            - print($count);
+            |&nbsp;
+            | фото

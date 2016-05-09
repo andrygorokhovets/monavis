@@ -1,0 +1,44 @@
+.col-md-3.col-sm-3.footer-logo
+    a.logo(href="#")
+        img(src!="<?php echo get_template_directory_uri(); ?>/assets/img/footer-logo.png", alt="")
+    //.social-links
+        a.social-link.facebook(href="#")
+            i.fa.fa-facebook
+        a.social-link.vk(href="#")
+            i.fa.fa-vk
+        a.social-link.pinterest(href="#")
+            i.fa.fa-pinterest
+        a.social-link.instagram(href="#")
+            i.fa.fa-instagram
+.col-md-6.col-sm-6.footer-menu
+    .navbar-collapse.collapse
+        ul.nav.navbar-nav
+            - if (class_exists('wpMenu', false)):
+            - $wpM = new wpMenu('footer-menu');
+            - $firstMenuLevel = $wpM->getMenu(0);
+            - foreach($firstMenuLevel as $menu_item_0):
+            li(class!='<?php print($menu_item_0->class." ".$menu_item_0->megaclass); ?>')
+                a(href!='<?php print($menu_item_0->link); ?>', title!='<?php print($menu_item_0->title); ?>')
+                    - print($menu_item_0->title);
+            - endforeach;
+            - endif;
+.col-md-3.col-sm-3.footer-copy
+    p © 2014 Mon Avis
+        br
+        |Original design by iskra.ua
+        br
+        |created by&nbsp;
+        a(href="http://www.iskra.ua/", target="_blank") иskra*
+    //p Адрес: г. Киев, ул. Срибнокильская, 1 (ст. м. Позняки)
+    //p Телефоны: 067 550-11-86, 044 220-06-05
+    //p РЕЖИМ РАБОТЫ:
+    //table
+        tr
+            td Пн – Пт:
+            td 10:00 – 20:00
+        tr
+            td Сб:
+            td 11:00 – 18:00
+        tr
+            td Вс:
+            td выходной

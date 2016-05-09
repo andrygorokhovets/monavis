@@ -1,0 +1,20 @@
+.gallery-master-class
+    .row
+        - $k = 1;
+        - foreach ($gallery as $image):
+        - $image_src = getImage('decoration', '400x210', $image);
+        - $image_src = getImage('project', '170x85', $image);
+        - $thumbnail_src = getImage('group', '200x200', $image);
+        - $full_src = wp_get_attachment_image_src($image, 'full');
+        .col-md-3
+            - if(!empty($full_src)):
+            a.lightbox(href!="<?php print($full_src[0]); ?>", data-options!="thumbnail:'<?php print($thumbnail_src); ?>'", rel!="ilightbox[gallery<?php print(get_the_ID()); ?>]")
+                img.img-responsive(src!="<?php print($image_src); ?>", alt!="<?php print(get_the_title()); ?>")
+            - else:
+            a
+                img.img-responsive(src!="<?php print($image_src); ?>", alt!="<?php print(get_the_title()); ?>")
+            - endif;
+            p
+                - print(the_post_thumbnail_description($image));
+        - if($k%4 == 0) print('<div class="clear"></div>');$k++;
+        - endforeach;

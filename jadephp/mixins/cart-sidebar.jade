@@ -1,0 +1,57 @@
+- global $themename, $woocommerce;
+- $cart_content = $woocommerce->cart->get_cart();
+aside.cart
+    .aside-container
+        .aside-header
+            h3.pull-left
+                a(href!='<?php print($woocommerce->cart->get_cart_url()); ?>')
+                    - print(__('Cart', $themename));
+        .aside-content.header-content.cart-content
+            table.table
+                thead
+                    tr
+                        td
+                            - print(__('Product', $themename));
+                        td
+                            - print(__('Qt-ity', $themename));
+                        td
+                            - print(__('Price', $themename));
+                tbody.cart-product-list
+                    - foreach($cart_content as $index=>$product):
+                    tr.cart-product
+                        td
+                            a.cart-operation.remove(data-product_id!='<?php print($product["product_id"]); ?>', data-action='remove_product', data-quantity='1', data-key!='<?php print($index); ?>', href='#')
+                                i.fa.fa-times
+                            span.product-cart-name
+                                - print($product['data']->post->post_title);
+                        td
+                            span.product-cart-quantity
+                                - print($product['quantity']);
+                        td
+                            - print(wc_price($product['line_total']));
+                    - endforeach;
+                tfoot
+                    tr
+                        td
+                            span
+                                - print(__('Products:', $themename));
+                                |&nbsp;
+                            span.cart-total-count
+                                - print($woocommerce->cart->cart_contents_count);
+                        td(colspan="2")
+                            span
+                                - print(__('Total:', $themename));
+                                |&nbsp;
+                            span.cart-total-price
+                                - print($woocommerce->cart->get_cart_total());
+            - $cart_class = 'row cart-buttons-row ';
+            - if(sizeof( $woocommerce->cart->cart_contents) == 0):
+                - $cart_class .= 'hidden';
+            - endif;
+            div(class!='<?php print($cart_class); ?>')
+                .col-md-6.text-right
+                    a.btn.btn-default.text-center(href!='<?php print($woocommerce->cart->get_checkout_url()); ?>')
+                        - print(__('Submit order', $themename));
+                .col-md-6.text-left
+                    a.btn.btn-default.text-center(href!='<?php print($woocommerce->cart->get_cart_url()); ?>')
+                        - print(__('Go to cart', $themename));

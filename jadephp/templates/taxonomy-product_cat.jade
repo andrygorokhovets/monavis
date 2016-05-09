@@ -1,0 +1,58 @@
+- $title = get_queried_object()->name;
+- global $themename;
+doctype html
+html
+    head
+        - get_header();
+    body
+        section.slider.head-slider
+            include /mixins/slider.jade
+        section.header
+            include /mixins/header.jade
+        section.content
+            .container
+                .row
+                    .col-md-9.main-content
+                        include /mixins/page-head.jade
+                        .row
+                            .col-md-12
+                                - $cid = get_queried_object_id();
+                                - $display_type = get_woocommerce_term_meta( $cid, 'display_type', true );
+                                - $args = array('orderby' => 'name','order' => 'ASC','hide_empty' => true, 'exclude' => array(),'number' => '','fields' => 'all','parent'  => $cid,'hierarchical' => false,'child_of' => $cid, 'offset' => '');
+                                - $terms = get_terms('product_cat', $args);
+                                - $i = 1;
+                                - if(!empty($terms) && sizeof($terms)>0 && $display_type != 'products'):
+                                .product_cat-row.row
+                                    - foreach($terms as $term):
+                                    - $image_id = get_woocommerce_term_meta( $term->term_id, 'thumbnail_id', true );
+                                    - $image_src = getImage('decoration', '400x210', $image_id);
+                                    - $title = $term->name;
+                                    - $permalink = get_term_link($term);
+                                    - $cat_id = $term->term_id;
+                                    include /mixins/product_cat-block.jade
+                                    - if($i%3 == 0):
+                                    - print('</div><div class="row product_cat-row">');
+                                    - endif;
+                                    - $i++;
+                                    - endforeach;
+                                - else:
+                                - wp_reset_query();
+                                - $posts_per_page = get_option('posts_per_page');
+                                - $cpage = (get_query_var('paged')) ? get_query_var('paged') : 1;
+                                - query_posts(array ('posts_per_page' => $posts_per_page, 'orderby' => 'menu_order', 'order' => 'ASC', 'paged' => $cpage, 'post_type'=>'product','tax_query' => array( array( 'taxonomy' => 'product_cat','terms' => $cid, 'field' => 'term_id') ), 'meta_query'  => array(array('key' => '_stock_status','value' => array('instock'),'compare' => 'IN')) ) );
+                                - if (have_posts()):
+                                .product-row.row
+                                    .product-isotope
+                                        - while (have_posts()):
+                                        - the_post();
+                                        include /mixins/product-block.jade
+                                        - endwhile;
+                                .row
+                                    .col-md-12
+                                        - wp_bootstrap_pagination();
+                                - endif;
+                                - wp_reset_query();
+                                - endif;
+                    .col-md-3.sidebar
+                        include /templates/sidebar.jade
+        - get_footer();

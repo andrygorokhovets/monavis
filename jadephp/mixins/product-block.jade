@@ -1,0 +1,52 @@
+- global $themename, $woocommerce, $product;
+- $image_id = get_post_thumbnail_id();
+- $image_src = getImage('group', '200x200', $image_id);
+- $product_price = $product->get_price();
+- $product_sale_price = $product->get_sale_price();
+- $product_regular_price = $product->get_regular_price();
+- $product_brand = array_shift(wc_get_product_terms($post->ID, 'pa_proizvoditel',array( 'fields' => 'names' )));
+- $attributes = $product->get_attributes();
+- $availability = $product->get_availability();
+
+div(class!='col-md-3 col-sm-6 col-xs-12 product-block <?php if(!empty($product_sale_price)) print("sale"); ?>', itemscope, itemtype="http://schema.org/Product")
+    .product-block-container
+        a.product-block-img(href!="<?php print(get_the_permalink()); ?>")
+            img.img-responsive(src!="<?php print($image_src); ?>", alt!="<?php print(get_the_title()); ?>", itemprop="image")
+        .product-block-title
+            a(href!="<?php print(get_the_permalink()); ?>")
+                span(itemprop="name")
+                    - print(get_the_title());
+        .product-block-attributes
+            - foreach ( $attributes as $attribute ) :
+            - if ( empty( $attribute['is_visible'] ) || ( $attribute['is_taxonomy'] && ! taxonomy_exists( $attribute['name'] ) ) ):
+            - continue;
+            - else:
+            - $has_row = true;
+            - endif;
+            .product-block-attribute(class!="<?php if ( ( $alt = $alt * -1 ) == 1 ) print('alt'); ?>")
+                p
+                    - print(wc_attribute_label( $attribute['name'] ));
+                    - print(':')
+                - if ( $attribute['is_taxonomy'] ) :
+                - $values = wc_get_product_terms( $product->id, $attribute['name'], array( 'fields' => 'names' ) );
+                - print(apply_filters( 'woocommerce_attribute', wpautop( wptexturize( implode( ', ', $values ) ) ), $attribute, $values ));
+                - else:
+                - $values = array_map( 'trim', explode( WC_DELIMITER, $attribute['value'] ) );
+                - print(apply_filters( 'woocommerce_attribute', wpautop( wptexturize( implode( ', ', $values ) ) ), $attribute, $values ));
+                - endif;
+            - endforeach;
+        .product-block-price(itemprop="offers", itemscope, itemtype="http://schema.org/Offer")
+            p
+                span
+                    - print(__('Regular price:', $themename))
+                span(itemprop="price")
+                    - print(wc_price($product_regular_price));
+                meta(itemprop="priceCurrency", content!="<?php print(get_woocommerce_currency()); ?>")
+            - if(!empty($product_sale_price)):
+            p
+                span
+                    - print(__('Sale price:', $themename))
+                span(itemprop="price")
+                    - print(wc_price($product_sale_price));
+            - endif;
+

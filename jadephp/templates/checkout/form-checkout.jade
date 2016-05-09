@@ -1,0 +1,40 @@
+- $woo = 'woocommerce';
+
+- if(sizeof(WC()->session->get( 'wc_notices', array())) > 0):
+.col-md-12.cart-alert
+    .alert.alert-info.alert-dismissible.fade.in(role="alert")
+        button.close(type="button", data-dismiss="alert", aria-label="Close")
+            span(aria-hidden="true") ×
+        - wc_print_notices();
+- endif;
+
+- do_action( 'woocommerce_before_checkout_form', $checkout );
+
+- if ( ! $checkout->enable_signup && ! $checkout->enable_guest_checkout && ! is_user_logged_in() ) :
+    - print apply_filters( 'woocommerce_checkout_must_be_logged_in_message', __( 'You must be logged in to checkout.', $woo ) );
+    - return;
+- endif;
+
+- $get_checkout_url = apply_filters( 'woocommerce_get_checkout_url', WC()->cart->get_checkout_url() );
+
+.col-md-12
+    form.checkout.woocommerce-checkout(name='checkout', method='post', action!='<?php print esc_url( $get_checkout_url ); ?>', enctype='multipart/form-data', data-toggle="validator", role="form")
+        .row
+            .col-md-6
+                - if ( sizeof( $checkout->checkout_fields ) > 0 ) :
+                - do_action( 'woocommerce_checkout_before_customer_details' );
+                - do_action( 'woocommerce_checkout_billing' );
+                - do_action( 'woocommerce_checkout_shipping' );
+                - endif;
+            .col-md-6
+                - do_action( 'woocommerce_checkout_before_order_review' );
+                h3#order_review_heading
+                    - _e( 'Your order', $woo );
+                #order_review.woocommerce-checkout-review-order
+                    - do_action( 'woocommerce_checkout_order_review' );
+                - do_action( 'woocommerce_checkout_after_order_review' );
+
+        - do_action( 'woocommerce_checkout_after_customer_details' );
+
+- do_action( 'woocommerce_after_checkout_form', $checkout );
+

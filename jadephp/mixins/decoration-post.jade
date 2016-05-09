@@ -1,0 +1,34 @@
+.gallery-line
+    .col-md-8.gallery-big-picture
+        - $thumbnail_id = get_post_thumbnail_id();
+        - $thumbnail_src = getImage('group', '200x200', $thumbnail_id);
+        - $big_image_src = getImage('project_big', '800x380', $thumbnail_id);
+        - $full_image_src = getPostImage();
+        - if(!empty($thumbnail_id)):
+        a.lightbox.decoration-big-picture(href!="<?php print($full_image_src); ?>", data-options!="thumbnail:'<?php print($thumbnail_src); ?>'", rel!="ilightbox[gallery<?php print(get_the_ID()); ?>]")
+            img.img-responsive(src!="<?php print($big_image_src); ?>", alt!="<?php print(get_the_title()); ?>")
+        - else:
+        a
+            img.img-responsive(src!="<?php print($big_image_src); ?>", alt!="<?php print(get_the_title()); ?>")
+        - endif;
+    - global $wpdb;
+    - $query = $wpdb->get_results("SELECT DISTINCT p.post_title AS title, p.ID, pm.meta_value AS image_id FROM wp_posts AS p INNER JOIN wp_postmeta AS pm ON (pm.post_id = p.ID) LEFT JOIN wp_term_relationships AS tr ON (tr.object_id = p.ID) LEFT JOIN wp_term_taxonomy AS tt ON (tt.term_taxonomy_id  = tr.term_taxonomy_id ) WHERE p.post_type= 'decoration' AND p.post_status = 'publish' AND pm.meta_key = '_thumbnail_id' AND tt.term_id IN($cid) ORDER BY p.menu_order");
+    - $items = $query;
+    - unset($query);
+    .col-md-4.gallery-small-pictures
+        include /mixins/decoration-gallery.jade
+    - unset($items);
+.page-line.col-md-12.interior-info
+    .page-container.pull-left
+        .page-heading
+            h3.decoration-heading
+                a(href!="<?php print(get_the_permalink()); ?>")
+                    - print(get_the_title());
+            .btn-container.page-heading-order
+                a.btn.btn-primary(href!="<?php print(get_post_type_archive_link('decoration')); ?>")
+                    span
+                        - print(__('See all', $themename));
+                    i.fa.fa-chevron-circle-right
+        .page-content.pull-left
+            .page-text.decoration-text
+                - the_content();

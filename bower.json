@@ -1,0 +1,22 @@
+{
+  "name": "monavis",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "font-awesome": "latest",
+    "jquery": "1.11.1",
+    "bootstrap": ">=3.3",
+    "jquery-carousel": "^2.0.5",
+    "malihu-custom-scrollbar-plugin": "~3.0.9",
+    "jquery-mousewheel": ">=3.0.6",
+    "bootstrap-select": "^1.7",
+    "bootstrap-validator": "^0.8",
+    "awesome-bootstrap-checkbox": "^0.3.4",
+    "isotope": "~2.2",
+    "bootstrap-datepicker": "^1.4",
+    "jquery.gmap": "~3"
+  }
+}

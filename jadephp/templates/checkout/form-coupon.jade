@@ -1,0 +1,20 @@
+- $woo = 'woocommerce';
+
+- if ( ! WC()->cart->coupons_enabled() ):
+- return;
+- endif;
+.col-md-12
+    .row
+        .col-md-4
+            a.showcoupon.btn.btn-info(role="button", data-toggle="collapse", href="#couponForm", aria-expanded="false", aria-controls="couponForm")
+                - print(__( 'Click here to enter your code', $woo ));
+        .col-md-8
+            #couponForm.collapse
+                form#checkout_coupon(method='post')
+                    .input-group
+                        label.input-group-addon(for='coupon_code')
+                            -_e( 'Coupon', 'woocommerce' );
+                        input#coupon_code.input-text.form-control(typle='text', name='coupon_code', placeholder!='<?php _e( "Coupon code", $woo ); ?>', value='')
+                        span.input-group-btn
+                            input.button.btn.btn-info(type='submit', name='apply_coupon', value!='<?php _e( "Apply Coupon", $woo); ?>')
+                            - do_action( 'woocommerce_cart_coupon' );

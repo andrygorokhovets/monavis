@@ -1,0 +1,86 @@
+- $woo = 'woocommerce';
+
+- if ( $order ) :
+
+.col-md-12
+
+    - if ( $order->has_status( 'failed' ) ) :
+
+    .alert.alert-danger.alert-dismissible.fade.in(role="alert")
+        button.close(type="button", data-dismiss="alert", aria-label="Close")
+            span(aria-hidden="true") ×
+        span
+            - print __( 'Unfortunately your order cannot be processed as the originating bank/merchant has declined your transaction.', $woo );
+
+        span
+            - if ( is_user_logged_in() ):
+            print __( 'Please attempt your purchase again or go to your account page.', $woo );
+            - else:
+            print __( 'Please attempt your purchase again.', $woo );
+            - endif;
+
+        span
+            a.button.pay.btn.btn-info(href!='<?php print esc_url( $order->get_checkout_payment_url() ); ?>')
+                - print __( 'Pay', $woo )
+            - if ( is_user_logged_in() ) :
+            a.button.pay.btn.btn-info(href!='<?php print esc_url( wc_get_page_permalink( "myaccount" ) ); ?>')
+                - print __( 'My Account', $woo );
+            - endif;
+
+    - else:
+
+    .alert.alert-info.alert-dismissible.fade.in(role="alert")
+        button.close(type="button", data-dismiss="alert", aria-label="Close")
+            span(aria-hidden="true") ×
+        span
+            - print apply_filters( 'woocommerce_thankyou_order_received_text', __( 'Thank you. Your order has been received.', $woo ), $order );
+
+    table.table.table-hover
+        tr
+            td
+                - _e( 'Order Number:', $woo );
+            td
+                strong
+                    - print $order->get_order_number();
+
+        tr
+            td
+                - _e( 'Date:', $woo );
+            td
+                strong
+                    - print date_i18n( get_option( 'date_format' ), strtotime( $order->order_date ) );
+
+        tr
+            td
+                - _e( 'Total:', $woo );
+            td
+                strong
+                    - print $order->get_formatted_order_total();
+
+        - if ( $order->payment_method_title ) :
+        tr.hidden
+            td
+                - _e( 'Payment Method:', $woo );
+            td
+                strong
+                    - print $order->payment_method_title;
+        - endif;
+
+    - endif;
+
+
+
+    .hidden
+        - do_action( 'woocommerce_thankyou_' . $order->payment_method, $order->id );
+    .row
+        - do_action( 'woocommerce_thankyou', $order->id );
+
+- else:
+
+.col-md-12
+    .alert.alert-info.alert-dismissible.fade.in(role="alert")
+        button.close(type="button", data-dismiss="alert", aria-label="Close")
+            span(aria-hidden="true") ×
+        span
+            -print apply_filters( 'woocommerce_thankyou_order_received_text', __( 'Thank you. Your order has been received.', $woo ), null );
+- endif;

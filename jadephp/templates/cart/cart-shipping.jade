@@ -1,0 +1,77 @@
+- $woo = 'woocommerce';
+tr.shipping
+    th
+        - if ( $show_package_details ):
+        - printf( __( 'Shipping #%d', $woo ), $index + 1 );
+        - else:
+        - print _e( 'Shipping', $woo );
+        - endif;
+    td
+        - if ( !empty( $available_methods ) ):
+
+        - if (1 === count($available_methods)):
+        - $method = current( $available_methods );
+        - wp_kses_post( wc_cart_totals_shipping_method_label( $method ) );
+        input.shipping_method(type='hidden', name!='shipping_method[<?php print $index; ?>]', data-index!='<?php print $index; ?>', id!='shipping_method_<?php print $index; ?>', value!='<?php print esc_attr( $method->id ); ?>')
+        - elseif( get_option( 'woocommerce_shipping_method_format' ) === 'select' ) :
+        select.shipping_method.bootstrap-select(name!='shipping_method[<?php print $index; ?>]', data-index!='<?php print $index; ?>', id!='shipping_method_<?php print $index; ?>')
+            - foreach ( $available_methods as $method ):
+            option(value!='<?php print esc_attr( $method->id ); ?>')
+                - print wp_kses_post( wc_cart_totals_shipping_method_label( $method ) );
+            - endforeach;
+        - else:
+        ul#shipping_method
+            - foreach ( $available_methods as $method ):
+            li
+                input(type='radio', name!='shipping_method[<?php print $index; ?>]', data-index='<?php print $index; ?>', id!='shipping_method_<?php print $index; ?>_<?php print sanitize_title( $method->id ); ?>')
+                label(for!='shipping_method_<?php print $index; ?>_<?php print sanitize_title( $method->id ); ?>')
+            - endforeach;
+        - endif;
+
+        - elseif ( !WC()->customer->get_shipping_state() || !WC()->customer->get_shipping_postcode() ):
+
+        - if ( is_cart() && get_option( 'woocommerce_enable_shipping_calc' ) === 'yes' ):
+        p
+            - _e( 'Please use the shipping calculator to see available shipping methods.', $woo );
+        - elseif ( is_cart() ):
+        p
+            - _e( 'Please continue to the checkout and enter your full address to see if there are any available shipping methods.', $woo );
+        - else:
+        p
+            - _e( 'Please fill in your details to see available shipping methods.', $woo );
+        - endif;
+
+        - else:
+
+        - if ( is_cart() ):
+        - print apply_filters( 'woocommerce_cart_no_shipping_available_html', '<p>' . __( 'There are no shipping methods available. Please double check your address, or contact us if you need any help.', $woo ) . '</p>');
+        - else:
+        - print apply_filters( 'woocommerce_no_shipping_available_html', '<p>' . __( 'There are no shipping methods available. Please double check your address, or contact us if you need any help.', $woo ) . '</p>');
+        - endif;
+
+        - endif;
+
+        - if ( $show_package_details ):
+        - foreach ( $package['contents'] as $item_id => $values ):
+        - if ( $values['data']->needs_shipping() ):
+        - $product_names[] = $values['data']->get_title() . ' &times;' . $values['quantity'];
+        - print '<p class="woocommerce-shipping-contents"><small>' . __( 'Shipping', 'woocommerce' ) . ': ' . implode( ', ', $product_names ) . '</small></p>';
+        - endif;
+        - endforeach;
+        - endif;
+
+        - if ( is_cart() ) :
+        - woocommerce_shipping_calculator();
+        - endif;
+
+
+
+
+
+
+
+
+
+
+
+

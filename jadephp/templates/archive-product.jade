@@ -1,0 +1,37 @@
+- $post_type = get_post_type_object('product');
+- global $themename;
+doctype html
+html
+    head
+        - get_header();
+    body
+        section.slider.head-slider
+            include /mixins/slider.jade
+        section.header
+            include /mixins/header.jade
+        section.content
+            .container
+                .row
+                    .col-md-9.main-content
+                        include /mixins/page-head.jade
+                        .row
+                            .col-md-12
+                                .product_cat-row.row
+                                    - $args = array('orderby' => 'name','order' => 'ASC','hide_empty' => true, 'exclude' => array(),'number' => '','fields' => 'all','parent'  => 0,'hierarchical' => false,'child_of' => 0, 'offset' => '');
+                                    - $terms = get_terms('product_cat', $args);
+                                    - $i = 1;
+                                    - foreach($terms as $term):
+                                    - $image_id = get_woocommerce_term_meta( $term->term_id, 'thumbnail_id', true );
+                                    - $image_src = getImage('decoration', '400x210', $image_id);
+                                    - $title = $term->name;
+                                    - $permalink = get_term_link($term);
+                                    - $cat_id = $term->term_id;
+                                    include /mixins/product_cat-block.jade
+                                    - if($i%3 == 0):
+                                    - print('</div><div class="row product_cat-row">');
+                                    - endif;
+                                    - $i++;
+                                    - endforeach;
+                    .col-md-3.sidebar
+                        include /templates/sidebar.jade
+        - get_footer();

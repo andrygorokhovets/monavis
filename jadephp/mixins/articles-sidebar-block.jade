@@ -1,0 +1,30 @@
+- global $sidebar_excerpt_words;
+- $category_id = get_category_by_slug( 'articles' );
+- $articles_link = get_category_link($category_id);
+.aside-container
+    .aside-header
+        h3.pull-left
+            a(href!='<?php print esc_url($articles_link); ?>')
+                - print($category_id->cat_name);
+        .read-more-aside.pull-right.text-right
+            a(href!='<?php print esc_url($articles_link); ?>')
+                - print(__('Show all', $themename));
+    .aside-content.header-content
+        - $news = new WP_Query(array('category_name' => 'articles','showposts' => 2));
+        - if ( $news->have_posts() ):
+        - while ( $news->have_posts() ):
+        - $news->the_post();
+        .row.news-row
+            .col-md-5.img-block.hidden-sm.hidden-xs
+                - $image_id = get_post_thumbnail_id();
+                - $image_src = getImage('articles', '100x80', $image_id);
+                a(href!='<?php print(get_the_permalink()); ?>')
+                    img(src!='<?php print($image_src); ?>', alt!='<?php print(get_the_title()); ?>')
+            .col-md-7.text-block
+                a.title(href!='<?php print(get_the_permalink()); ?>')
+                    - print(get_the_title());
+                p.excerpt
+                    - print(wp_trim_words(get_the_excerpt(), $sidebar_excerpt_words));
+        - endwhile;
+        - endif;
+        - wp_reset_query();
