@@ -263,7 +263,6 @@ section.header {
 }
 
 /*Main Content*/
-
 section.content {
   .container {
     .row {
@@ -1901,3 +1900,12 @@ section.footer {
 }
 
 @import "responsive";
+
+.front .categories-content > div:nth-child(2) {padding-bottom: 0;}
+.front .categories-content > div:last-child {
+  margin-bottom: 0!important;
+  margin-top: -25px;
+  background: #F0F2F5;
+
+  & > div {display: none;}
+}
