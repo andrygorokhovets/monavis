@@ -33,9 +33,10 @@ html
                                             .col-md-12
                                                 - the_content();
                                             .col-md-4
-                                                - print(do_shortcode('[gravityform id="2" name="Contact" title="false" description="false" ajax="true"]'));
+                                                 - print(do_shortcode('[gravityform id="2" name="Contact" title="false" description="false" ajax="true"]'));
                                             .col-md-8
-                                                #map
+                                                #map-ya
+                                                    script(async, src="https://api-maps.yandex.ru/services/constructor/1.0/js/?sid=iUbWpQpkRlsSFpcgATVPNYj0GyBCP-_H&width=730&height=306&lang=ru_UA&sourceType=constructor&scroll=true")
                                                 .row.contact-info
                                                     .col-md-4
                                                         table.table
@@ -43,7 +44,7 @@ html
                                                                 td
                                                                     p
                                                                         - print(__('Address', $themename));
-                                                                    a(href!="<?php print($map_link); ?>")
+                                                                        a(href!="<?php print($map_link); ?>")
                                                                         i.fa.fa-map-marker
                                                                         |&nbsp;
                                                                         span

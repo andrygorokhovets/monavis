@@ -24,7 +24,7 @@ html
                                         .page-text
                                             - $posts_per_page = get_option('posts_per_page');
                                             - $cpage = (get_query_var('paged')) ? get_query_var('paged') : 1;
-                                            - query_posts(array('posts_per_page' => $posts_per_page, 'paged' => $cpage, 'post_type'=> 'project'));
+                                            - query_posts(array('posts_per_page' => $posts_per_page, 'paged' => $cpage, 'post_type'=> 'project', 'orderby' => menu_order, 'order' => 'ASC'));
                                             - if (have_posts()):
                                             - while (have_posts()):
                                             - the_post();

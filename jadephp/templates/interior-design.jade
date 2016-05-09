@@ -50,7 +50,7 @@ html
                                         .page-text
                                             - $related = get_post_meta($post->ID, 'ma_types', true);
                                             - if(!empty($related)):
-                                            - query_posts(array('post_type'=> 'project', 'tax_query' => array( array( 'taxonomy' => 'design-type','terms' => $related, 'field' => 'term_id') )));
+                                            - query_posts(array('post_type'=> 'project', 'tax_query' => array( array( 'taxonomy' => 'design-type','terms' => $related, 'field' => 'term_id') ), 'orderby' => menu_order, 'order' => 'ASC'));
                                             - if (have_posts()): $i = 1;
                                             - while (have_posts()):
                                             - the_post();
