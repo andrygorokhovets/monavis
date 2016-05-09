@@ -1,8 +1,8 @@
 {
     "name": "monavis",
     "description": "website",
-    "directory":"../../Winginx/home/monavis.local/public_html/wp-content/themes/monavis/assets/",
-    "templates":"../../Winginx/home/monavis.local/public_html/wp-content/themes/monavis/",
+    "directory":"../monavis/assets/",
+    "templates":"../monavis/",
     "repository": "https://github.com/iskrateam/vhosts",
     "dependencies": {},
     "devDependencies": {

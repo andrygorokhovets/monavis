@@ -5,9 +5,14 @@
       .col-md-6.col-sm-12.gallery-small-pictures-col
          div(class!="gallery-small-pictures-container <?php if($item->ID == get_the_ID()) print('current'); ?>")
             - $image_src = getImage('project', '170x85', $item->image_id);
-            img.img-responsive(src!="<?php print($image_src); ?>", alt!="<?php print($item->title); ?>")
-            a.gallery-small-ajax(href!="<?php print(get_the_permalink($item->ID)); ?>", data-id!="<?php print($item->ID); ?>", data-action="get" title!="<?php print($item->title); ?>")
+            - $full_image_src = wp_get_attachment_image_src($item->image_id, 'full');
+            - $full_image_src = $full_image_src[0];
+            - $itemTitle = $item->title;
+            - $itemURL = get_the_permalink($item->ID);
+            - $itemLink = "<a href = '".$itemURL ."'>".esc_attr($itemTitle)."</a>";
+            img.img-responsive(src!="<?php print($image_src); ?>", alt!="<?php print($itemTitle); ?>")
+            a.lightbox.gallery-small-ajax(href!="<?php print($full_image_src); ?>", data-id!="<?php print($item->ID); ?>", data-caption!="<?php print($itemLink); ?>" title!="<?php print($itemTitle); ?>")
                span
-                  - print($item->title);
+                  - print($itemTitle);
       - endforeach;
 - endif;
