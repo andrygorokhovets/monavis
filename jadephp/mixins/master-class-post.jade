@@ -25,6 +25,13 @@
                         - print(__('Take a question', $themename));
                     |&nbsp;
                     i.fa.fa-question-circle
+            .button-col
+                .btn-container
+                    a.btn.btn-primary(data-toggle="modal", data-target!="#timetableMCModal")
+                        span
+                            - print(__('Course', $themename));
+                        | &nbsp;
+                        i.fa.fa-calendar-times-o
         .page-content.pull-left
             .page-text
                 - the_content();

@@ -6,7 +6,7 @@
             h3
                 a(href!='<?php print(get_the_permalink()); ?>')
                     -print(get_the_title());
-        .news-content.pull-left
+        .news-content
             .col-md-3.news-image
                 img.img-responsive(src!='<?php print($image_src); ?>', alt!='<?php print(get_the_title()); ?>')
             .col-md-9.news-text

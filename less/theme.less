@@ -50,9 +50,14 @@ a.btn, a.btn-default {
   clear: both;
 }
 
+img.alignleft {
+  float: left;
+  margin-right: 10px;
+}
 
 
-/*Bottom line*/
+
+  /*Bottom line*/
 
 .bottom-line-col {
   position: relative;
@@ -63,8 +68,6 @@ a.btn, a.btn-default {
     margin:-17px 0 0 0;
   }
 }
-
-/*Carousel*/
 
 section.slider.head-slider {
   .double-border();
@@ -756,6 +759,9 @@ section.content {
     margin-bottom:15px;
     border-bottom: 1px solid @themeGray;
     position: relative;
+    background: #fff;
+    border-radius: 5px;
+
     .round-under(lighten(@themeGray,15%), 12px);
     .news-heading {
       .block-header(@themeDarkGray);
@@ -781,6 +787,7 @@ section.content {
           margin:0 0 15px 0;
           font-size: 14px;
           line-height: 18px;
+          text-align: justify;
         }
       }
       .btn-container {
@@ -794,6 +801,9 @@ section.content {
           bottom:8px;
         }
       }
+    }
+    &:after {
+      height: 0;
     }
   }
   &:last-child {
@@ -923,6 +933,9 @@ section.content {
           line-height: 18px;
           color:@themeDarkGray;
         }
+        table p {
+          padding:0 10px;
+        }
         a.lightbox {
           display: block;
           width: 100%;
@@ -934,6 +947,27 @@ section.content {
       }
     }
   }
+}
+
+body.decoration-service .main-content .page-content .page-text > p:first-child,
+body.literature .main-content .page-content .page-text > p:first-child,
+body.interior-design .main-content .page-content .page-text > p:first-child{
+  float: left;
+  max-width: 250px;
+}
+
+body.taxonomy-master .page-heading div.page-heading-order {
+  right: 150px!important;
+}
+
+body.taxonomy-master .page-heading div.button-col {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+body.taxonomy-decoration .interior-carousel .page-heading-order {
+  display: none;
 }
 
 /*Creative Group*/
@@ -1355,6 +1389,7 @@ section.content {
             font-size: 14px;
             line-height: 18px;
             color: black;
+            text-align: justify;
           }
           a.read-more {
             color: @themeColor;
@@ -1423,6 +1458,8 @@ section.content {
         height: 70px;
         overflow: hidden;
         color:@themeDarkGray;
+        text-align: justify;
+        word-spacing: -0.1ex;
       }
     }
     .under-container {

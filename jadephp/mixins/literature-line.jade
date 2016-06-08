@@ -13,8 +13,4 @@
             .col-md-9.news-text
                 p
                     - print(get_the_excerpt());
-            .btn-container.news-read-more
-                a.btn.btn-primary
-                    span
-                        - print(__('Order',$themename));
-                    i.fa.fa-chevron-circle-right
+                    <?php $shop_link = (get_post_meta($post->ID, 'shop_link', true)); if(!empty($shop_link)) { print "<div class='btn-container page-heading-order'><a href=".$shop_link['url']."' class='btn btn-primary'><span>".$shop_link['text']." </span><i class='fa fa-chevron-circle-right'></i></a></div>";}?>

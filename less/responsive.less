@@ -8,8 +8,8 @@
            }
          }
       }
-      }
     }
+  }
 }
 
 @media only screen and (max-width: 1200px) {
@@ -304,6 +304,44 @@
       }
     }
   }
+
+  body.decoration-service .main-content .page-content .page-text > p:first-child,
+  body.literature .main-content .page-content .page-text > p:first-child,
+  body.interior-design .main-content .page-content .page-text > p:first-child{
+    float: none;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+@media only screen and (min-width: 481px) {
+  .head-slider {
+    overflow: hidden;
+    max-height: 250px;
+
+    #monCarousel {
+      margin-top: -150px;
+
+      .carousel-inner .item .container h2 {
+        font-size: 70px;
+        line-height: normal;
+      }
+    }
+  }
+  body.front {
+    .head-slider {
+      overflow: inherit;
+      max-height: inherit;
+
+      #monCarousel {
+        margin-top: 0;
+
+        .carousel-inner .item .container h2 {
+          font-size: 80px;
+          line-height: 100px;
+        }
+      }
+    }
+  }
 }
 
 _::-moz-svg-foreign-content, :root .carousel-inner {
@@ -319,6 +357,12 @@ _::-moz-svg-foreign-content, :root .carousel-inner {
     width: 80%;
   }
 }
+@media (max-width: 991px) {
+  .carousel-inner .item .container h2 {
+    font-size: 60px;
+    line-height: normal;
+  }
+}
 
 @media (max-width: 991px) and (min-width: 768px) {
   section.header .container .row .header-menu {
@@ -331,6 +375,11 @@ _::-moz-svg-foreign-content, :root .carousel-inner {
   section.header .container .row .header-menu .navbar.navbar-default .navbar-collapse.collapse ul.nav.navbar-nav li a {
      padding: 15px 5px;
    }
+
+  .page-text dd.schedule {
+    width: 100%;
+    overflow: scroll;
+  }
 }
 
 @media (min-width: 992px) {

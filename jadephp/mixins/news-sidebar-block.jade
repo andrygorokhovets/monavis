@@ -14,7 +14,7 @@
                 span Подписаться
                 i.fa.fa-envelope-o
     .aside-content.header-content
-        - $news = new WP_Query(array('category_name' => 'news','showposts' => 1));
+        - $news = new WP_Query(array('category_name' => 'news','showposts' => 2));
         - if ( $news->have_posts() ):
         - while ( $news->have_posts() ):
         - $news->the_post();
